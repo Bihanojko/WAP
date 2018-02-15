@@ -1,48 +1,86 @@
-function Hello() {
-    var timeElements = document.getElementsByTagName("time");
-    var timeElementCount = timeElements.length;
+// Project: Time data in documents
+// Subject: Internet Applications
+// Author: Nikola Valesova, xvales02
 
+
+var timer = null;
+
+
+function main() {
     var controlsElement = document.getElementsByClassName('controls');
     if (controlsElement.length != 0)
         controlsElement[0].innerHTML = createControls();
 
+    absoluteDates();
 }
 
 
-function createControls()
-{
+function createControls() {
     var radioButtons = '<p>Set display method of timestamps<br>';
-    radioButtons += 'Absolute: <input type="radio" name="timeformat" value="absolute" onclick="changeTimestamps(0)" checked="checked" /><br>';
-    radioButtons += 'Relative: <input type="radio" name="timeformat" value="relative" onclick="changeTimestamps(1)" /></p>';
+    radioButtons += 'Absolute: <input type="radio" name="timeformat" id="absolute_time" value="absolute" onclick="changeTimestamps()" checked="checked" /><br>';
+    radioButtons += 'Relative: <input type="radio" name="timeformat" id="relative_time" value="relative" onclick="changeTimestamps()" /></p>';
     radioButtons += createTimeline();
     return radioButtons;
 }
 
 
 // TODO
-function createTimeline()
-{
-    return "";
+function createTimeline() {
+    var timeStamps = getAllTimeStamps();
+    var timeline = "<strong>Timeline:</strong><br>";
+
+    for (var i = 0; i < timeStamps.length; i++)
+        timeline += String(timeStamps[i][1]) + "<br>";
+
+    return timeline;
 }
 
 
-// TODO
-function changeTimestamps(format)
-{
-    if (format == 0)
-    {
-        alert("ZERO");
+function getAllTimeStamps() {
+    var timeElements = document.getElementsByTagName("time");
+    var timeElementCount = timeElements.length;
+    var timeStamps = [];
+
+    for (var i = 0; i < timeElementCount; i++)
+        timeStamps.push([new Date(timeElements[i].dateTime), timeElements[i].innerHTML]);
+        // timeStamps += String(new Date(timeElements[i].dateTime).toLocaleDateString("en-US", options)) + "<br>";
+
+    return timeStamps;
+}
+
+
+function changeTimestamps(format) {
+    if (document.getElementById("absolute_time").checked) {
+        if (timer != null) {
+            clearInterval(timer);
+            timer = null;
+        }
+        absoluteDates();
     }
-    else
-    {
-        alert("ONE");
-        relativeDates();
+    else {
+        if (timer == null)
+            timer = setInterval(function(){changeTimestamps();}, 60000);
+        relativeDates();        
     }
 }
 
 
-function relativeDates()
-{
+function absoluteDates() {
+    var timeElements = document.getElementsByTagName("time");
+    var timeElementCount = timeElements.length;
+
+    for (var i = 0; i < timeElementCount; i++) {
+        var absTime = new Date(timeElements[i].dateTime);
+        var options = {
+            year: "numeric", month: "short", // weekday: "long",
+            day: "numeric", hour: "2-digit", minute: "2-digit"  
+        };
+        timeElements[i].innerHTML = absTime.toLocaleDateString("en-US", options); 
+    }
+}
+
+
+function relativeDates() {
     var timeElements = document.getElementsByTagName("time");
     var timeElementCount = timeElements.length;
 
@@ -50,23 +88,20 @@ function relativeDates()
         var diffTime = new Date() - new Date(timeElements[i].dateTime);
         var timeDiffs = computeDifferentials(diffTime);
 
-        for (var i = timeDiffs.length - 1; i >= 0; i--)
+        for (var j = timeDiffs.length - 1; j >= 0; j--)
         {
-            if (timeDiffs[i][0] != 0) {
-                var msg = timeDiffs[i][0] + " " + timeDiffs[i][1];                
-                if (Math.abs(timeDiffs[i][0]) > 1)
+            if (timeDiffs[j][0] != 0) {
+                var msg = Math.abs(timeDiffs[j][0]) + " " + timeDiffs[j][1];                
+                if (Math.abs(timeDiffs[j][0]) > 1)
                     msg += "s";
-                if (timeDiffs[i][0] > 0)
-                    alert(msg + " ago")
+                if (timeDiffs[j][0] > 0)
+                    timeElements[i].innerHTML = msg + " ago";
                 else
-                    alert("In " + msg);
+                    timeElements[i].innerHTML = "in " + msg;
                 break;
             }
         }
     }
-
-    setTimeout(function(){relativeDates()}, 60000); // TODO
-    return;
 }
 
 
@@ -80,14 +115,6 @@ function computeDifferentials(diffTime) {
         [Math.trunc(diffTime / 2628000000), "month"], // TODO
         [Math.trunc(diffTime / 31535965310), "year"] // TODO
     ]
-}
-
-
-function convertDate(timeElement)
-{
-    var eventTime = new Date(timeElement.dateTime);
-    var nowTime = new Date();
-    return (nowTime - eventTime) / 1000;
 }
 
 // TODO test in Internet Explorer or Microsoft Edge, Firefox and Chrome
