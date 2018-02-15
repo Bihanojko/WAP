@@ -1,4 +1,6 @@
-<!-- TODO Ukázkový HTML dokument demo.html demonstrující funkčnost implementovaného řešení -->
+<!-- Project: Time data in documents -->
+<!-- Subject: Internet Applications -->
+<!-- Author: Nikola Valesova, xvales02 -->
 
 <!DOCTYPE html>
 <html>
@@ -8,11 +10,33 @@
       <script src = "script.js" type = "text/javascript"/></script>
    </head>
 
-   <body>
-      <input type = "button" onclick = "Hello();" name = "ok" value = "Click Me" />
+   <body onload="main()">
+      <p>The concert took place on <time title="Concert" datetime="2001-05-15T19:00">May 15</time>.<br>
+      I have a date on <time title="Date" datetime="2008-02-14 20:00">Valentines day</time>.</p>
+
+      <p>Dates:</p>
+      <time title="Year 2007" datetime="2007">Year 2007</time><br>
+      <time title="December 2018" datetime="2018-12">December 2018</time><br>
+      <time title="20. May 2018" datetime="2018-05-20">20. May 2018</time><br>
+      <time title="15. February 2018" datetime="02/15/2018">15. February 2018</time><br>
+      <time title="16. February 2018" datetime="Feb 16 2018">16. February 2018</time><br>
+      <time title="17. February 2018" datetime="17 Feb 2018">17. February 2018</time><br>
+      <time title="10. February 2018" datetime="Sat February 10 2018">10. February 2018</time><br>
+      
+      <p>Date and Times:</p>
+      <time title="20 December 2018 at 8am" datetime="2018-12-20T08:00">20 December 2018 at 8am</time><br>
+      <time title="20 December 2018 at 8am" datetime="2018-12-20 08:00">20 December 2018 at 8am</time><br>
+      <time title="20 December 2018 at 8:30am" datetime="2018-12-20 08:30:45">20 December 2018 at 8:30am</time><br>
+      <time title="20 December 2018 at 8:30:45.687am" datetime="2018-12-20 08:30:45.687">20 December 2018 at 8:30:45.687am</time>
+      
+      <p>Times:</p>
+      <time title="14. 2. 2018 at 8am" datetime="2018-02-14 08:00">14. 2. 2018 at 8am</time><br>
+      <time title="20. 5. 2018 at 8am in Rio de Janeiro" datetime="2018-05-20 08:00-03:00">20. 5. 2018 at 8am in Rio de Janeiro (UTC-3 hours)</time><br>
+      <time title="7. 4. 2018 at 8am in Madagascar" datetime="2018-04-07 08:00+03:00">7. 4. 2018 at 8am in Madagascar (UTC+3 hours)</time> <br><br>
+
       <div class="controls"></div>
-      <p>The concert took place on <time title="Concert" datetime="2001-05-15T19:00">May 15</time>.</p>
-      <p>I have a date on <time title="Date" datetime="2008-02-14 20:00">Valentines day</time>.</p>
     </body>
 
 </html>
+
+<!-- TODO Ukázkový HTML dokument demo.html demonstrující funkčnost implementovaného řešení -->
