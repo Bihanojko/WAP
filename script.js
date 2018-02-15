@@ -2,10 +2,6 @@ function Hello() {
     var timeElements = document.getElementsByTagName("time");
     var timeElementCount = timeElements.length;
 
-    // for (var i = 0; i < timeElementCount; i++) {
-    //     alert(convertDate(timeElements[i]));
-    // }
-
     var controlsElement = document.getElementsByClassName('controls');
     if (controlsElement.length != 0)
         controlsElement[0].innerHTML = createControls();
@@ -56,25 +52,20 @@ function relativeDates()
 
         for (var i = timeDiffs.length - 1; i >= 0; i--)
         {
-            if (timeDiffs[i][0] > 0) {
+            if (timeDiffs[i][0] != 0) {
                 var msg = timeDiffs[i][0] + " " + timeDiffs[i][1];                
-                if (timeDiffs[i][0] > 1)
+                if (Math.abs(timeDiffs[i][0]) > 1)
                     msg += "s";
-                alert(msg + " ago")
-                break;
-            }
-
-            if (timeDiffs[i][0] < 0) {
-                var msg = "In " + timeDiffs[i][0] + " " + timeDiffs[i][1];                
-                if (timeDiffs[i][0] > 1)
-                    msg += "s";
-                alert(msg)
+                if (timeDiffs[i][0] > 0)
+                    alert(msg + " ago")
+                else
+                    alert("In " + msg);
                 break;
             }
         }
     }
 
-    setTimeout(function(){relativeDates()}, 60000);
+    setTimeout(function(){relativeDates()}, 60000); // TODO
     return;
 }
 
@@ -98,3 +89,7 @@ function convertDate(timeElement)
     var nowTime = new Date();
     return (nowTime - eventTime) / 1000;
 }
+
+// TODO test in Internet Explorer or Microsoft Edge, Firefox and Chrome
+// TODO definujte vzhled všech zobrazovaných částí ve zvláštním externím stylovém předpise CSS 
+// opatřeném komentáři tak, aby uživatel mohl přizpůsobit vzhled řešení svým potřebám (zejména použité barvy, písmo, velikosti) 
