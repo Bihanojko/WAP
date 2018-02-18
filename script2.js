@@ -5,7 +5,8 @@
 
 var timer = null;
 var timelineHeight = 0;
-var timestampDiff = 70;
+var timestampDiff = 60;
+var canvasWidth = 800;
 
 
 function main() {
@@ -32,10 +33,9 @@ function createTimeline() {
     if (timeStamps.length != 0)
         timelineHeight = (timeStamps.length - 1) * timestampDiff;
 
-    var timeline = "<h3>Timeline:</h3>";
-    var canvasElement = "<canvas id=\"timelineCanvas\" width=\"600\" height=\"";
+    var timeline = "<h3>Timeline</h3>";
+    var canvasElement = "<canvas id=\"timelineCanvas\" width=\"" + canvasWidth + "\" height=\"";
     canvasElement += timelineHeight + 2 * 15;
-    // TODO remove border
     canvasElement += "\">Your browser does not support the HTML5 canvas tag.</canvas>";
 
     return timeline + canvasElement;
@@ -49,8 +49,8 @@ function drawTimeline() {
     ctx.strokeStyle = "#FF0000";
     ctx.lineWidth = 6;
     ctx.beginPath();
-    ctx.moveTo(200, 15);
-    ctx.lineTo(200, timelineHeight + 15);
+    ctx.moveTo(canvasWidth / 2, 15);
+    ctx.lineTo(canvasWidth / 2, timelineHeight + 15);
     ctx.stroke();
 }
 
@@ -64,18 +64,38 @@ function addPoints(showDates) {
     ctx.beginPath();
     ctx.fillStyle = "#FF0000";
     ctx.font = "17px Times New Roman";
-    var oneStep = timeDiffs[timeDiffs.length - 1] != 0 ? timelineHeight / timeDiffs[timeDiffs.length - 1] : 0;
+    var oneStep = timeDiffs[timeDiffs.length - 1] != 0 ? timeDiffs[timeDiffs.length - 1] / timelineHeight : 0;
 
     ctx.textAlign = "end";
-    for (var i = 0; i < timeStamps.length; i++) {
-        ctx.arc(200, timeDiffs[i] * oneStep + 15, 7, 0, 2*Math.PI);
-        ctx.fillText(showDates[i], 180, timeDiffs[i] * oneStep + 20);
+    for (var i = 0; i <= timelineHeight; i += 20) {
+        var correspondingEvents = getCorrespondingEvents(timeStamps, timeDiffs, oneStep, i);
+        if (correspondingEvents.length > 0)
+            ctx.arc(canvasWidth / 2, i + 15, 7, 0, 2*Math.PI);
+        if (correspondingEvents.length == 1)
+            ctx.fillText(showDates[correspondingEvents[0]], canvasWidth / 2 - 20, i + 20);
+        if (correspondingEvents.length > 1)
+            ctx.fillText(showDates[correspondingEvents[0]] + " - " + showDates[correspondingEvents[correspondingEvents.length - 1]], canvasWidth / 2 - 20, i + 20);
     }
 
     ctx.textAlign = "start";
-    for (var i = 0; i < timeStamps.length; i++)
-            ctx.fillText(timeStamps[i][1], 220, timeDiffs[i] * oneStep + 20); 
+    for (var i = 0; i <= timelineHeight; i += 20) {
+        var correspondingEvents = getCorrespondingEvents(timeStamps, timeDiffs, oneStep, i);
+        if (correspondingEvents.length == 1)
+            ctx.fillText(timeStamps[correspondingEvents[0]][1], canvasWidth / 2 + 20, i + 20);
+        if (correspondingEvents.length > 1)
+            ctx.fillText(timeStamps[correspondingEvents[0]][1] + " and " + (correspondingEvents.length - 1) + " other events", canvasWidth / 2 + 20, i + 20);    
+    }
     ctx.fill();
+}
+
+
+function getCorrespondingEvents(timeStamps, timeDiffs, oneStep, offset) {
+    var correspondingEvents = [];
+    for (var i = 0; i < timeStamps.length; i++) {
+        if (timeDiffs[i] >= offset * oneStep && timeDiffs[i] < (offset + 20) * oneStep)
+            correspondingEvents.push(i);
+    }
+    return correspondingEvents;
 }
 
 
