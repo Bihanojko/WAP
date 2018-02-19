@@ -6,7 +6,7 @@
 var timer = null;
 var timelineHeight = 0;
 var timestampDiff = 60;
-var canvasWidth = 800;
+var canvasWidth = 1000;
 
 
 function main() {
@@ -65,6 +65,14 @@ function addPoints(showDates) {
     ctx.fillStyle = "#FF0000";
     ctx.font = "17px Times New Roman";
     var oneStep = timeDiffs[timeDiffs.length - 1] != 0 ? timeDiffs[timeDiffs.length - 1] / timelineHeight : 0;
+
+    if (timeStamps.length == 1) {
+        ctx.arc(canvasWidth / 2, 15, 7, 0, 2*Math.PI);
+        ctx.textAlign = "end";
+        ctx.fillText(showDates[0], canvasWidth / 2 - 20, 20);        
+        ctx.textAlign = "start";
+        ctx.fillText(timeStamps[0][1], canvasWidth / 2 + 20, 20);
+    }
 
     ctx.textAlign = "end";
     for (var i = 0; i <= timelineHeight; i += 20) {
@@ -205,7 +213,7 @@ function computeDifferentials(diffTime) {
         [Math.trunc(diffTime / 86400000), "day"],
         [Math.trunc(diffTime / 604800000), "week"],
         [Math.trunc(diffTime / 2628000000), "month"], // TODO
-        [Math.trunc(diffTime / 31535965310), "year"] // TODO
+        [Math.trunc(diffTime / 31535965310), "year"]  // TODO
     ]
 }
 
