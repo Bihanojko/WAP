@@ -2,4 +2,35 @@
 <!-- Subject: Internet Applications -->
 <!-- Author: Nikola Valesova, xvales02 -->
 
-<!-- TODO Soubor navod.html obsahující stručný návod k použití v dokumentu (pro programátora, nikoliv pro koncového uživatele) -->
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>Internet Applications - Time data in documents - Guide</title>
+        <meta charset = "utf-8"/>
+        <meta name = "description" content="Guide for project in subject WAP"/>
+        <meta name = "author" content="Nikola Valesova"/>
+        <link href = 'style-demo.css' rel = 'stylesheet' type = 'text/css'/>        
+    </head>
+
+    <body>
+        <h1>Time data in documents &mdash; Guide</h1>
+
+        <p>The aim of this project is to create a script which
+            <ul>
+                <li>displays a timeline with all time stamps and their discriptions in the <i>controls</i> part of an HTML document</li>
+                <li>displays controls changing the format of displayed timestamps between absolute and relative</li>
+            </ul>
+        </p>
+
+        <p>Usage:
+            <ul>
+                <li>include the script using sequnce: &lt;script src = "timestamps.js" type = "text/javascript"/&gt;&lt;/script&gt;</li>
+                <li>include appropriate CSS style using sequnce: &lt;link href = 'style-timestamps.css' rel = 'stylesheet' type = 'text/css'/&gt;</li>
+                <li>add an empty <i>div class="controls"</i> element to HTML document to the place, where the timeline should be displayed</li>
+                <li>create and show a timeline by calling <i>main</i>, for example by adding: &lt;body onload = "main()"&gt;</li>
+            </ul>
+            An example of the script usage can be found in demo.html.
+        </p>
+    </body>
+</html>
