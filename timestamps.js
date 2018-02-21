@@ -2,13 +2,20 @@
 // Subject: Internet Applications
 // Author: Nikola Valesova, xvales02
 
+// style attributes for canvas content
+var timelineColour = "#FF0000";
+var canvasFont = "17px Times New Roman";
 
-var timer = null;
+// timeline and canvas size parameters
 var timelineHeight = 0;
-var timestampDiff = 60;
 var canvasWidth = 1000;
+var timestampDiff = 60;
+
+// timer for relative dates refresh
+var timer = null;
 
 
+// add control elements and timeline to page
 function main() {
     var controlsElement = document.getElementsByClassName('controls');
     if (controlsElement.length != 0)
@@ -17,17 +24,21 @@ function main() {
 }
 
 
+// create radio buttons for timestamp format change
 function createControls() {
-    var radioButtons = '<p>Set display method of timestamps<br>';
-    radioButtons += 'Absolute: <input type="radio" name="timeformat" id="absolute_time" '
-    radioButtons += 'value="absolute" onclick="changeTimestamps()" checked="checked" /><br>';
-    radioButtons += 'Relative: <input type="radio" name="timeformat" id="relative_time" '; 
-    radioButtons += 'value="relative" onclick="changeTimestamps()" /></p>';
+    var radioButtons = '<h4>Timestamps format</h4>';
+    radioButtons += '<label class="container">Absolute<input type="radio" name="timeformat" ';
+    radioButtons += 'id="absolute_time" value="absolute" onclick="changeTimestamps()" checked="checked">';
+    radioButtons += '<span class="checkmark"></span></label>';
+    radioButtons += '<label class="container">Relative<input type="radio" name="timeformat" ';
+    radioButtons += 'id="relative_time" value="relative" onclick="changeTimestamps()">';
+    radioButtons += '<span class="checkmark"></span></label>';
     radioButtons += createTimeline();
     return radioButtons;
 }
 
 
+// create canvas element for timeline drawing
 function createTimeline() {
     var timeStamps = getAllTimeStamps();
     if (timeStamps.length != 0)
@@ -42,11 +53,12 @@ function createTimeline() {
 }
 
 
+// draw a line on canvas
 function drawTimeline() {
     var c = document.getElementById("timelineCanvas");
     var ctx = c.getContext("2d");
     ctx.clearRect(0, 0, c.width, c.height);
-    ctx.strokeStyle = "#FF0000";
+    ctx.strokeStyle = timelineColour;
     ctx.lineWidth = 6;
     ctx.beginPath();
     ctx.moveTo(canvasWidth / 2, 15);
@@ -55,6 +67,7 @@ function drawTimeline() {
 }
 
 
+// add circles and descriptions to timeline
 function addPoints(showDates) {
     var c = document.getElementById("timelineCanvas");
     var ctx = c.getContext("2d");
@@ -62,8 +75,8 @@ function addPoints(showDates) {
     var timeDiffs = getTimeDiffs(timeStamps);
 
     ctx.beginPath();
-    ctx.fillStyle = "#FF0000";
-    ctx.font = "17px Times New Roman";
+    ctx.fillStyle = timelineColour;
+    ctx.font = canvasFont;
     var oneStep = timeDiffs[timeDiffs.length - 1] != 0 ? timeDiffs[timeDiffs.length - 1] / timelineHeight : 0;
 
     if (timeStamps.length == 1) {
@@ -97,6 +110,7 @@ function addPoints(showDates) {
 }
 
 
+// get set of events that belong to the same point on timeline
 function getCorrespondingEvents(timeStamps, timeDiffs, oneStep, offset) {
     var correspondingEvents = [];
     for (var i = 0; i < timeStamps.length; i++) {
@@ -107,13 +121,14 @@ function getCorrespondingEvents(timeStamps, timeDiffs, oneStep, offset) {
 }
 
 
+// get a set of timestamps and their descriptions 
 function getAllTimeStamps() {
     var timeElements = document.getElementsByTagName("time");
     var timeElementCount = timeElements.length;
     var timeStamps = [];
 
     for (var i = 0; i < timeElementCount; i++)
-        timeStamps.push([new Date(timeElements[i].dateTime), timeElements[i].innerHTML]);
+        timeStamps.push([new Date(timeElements[i].dateTime), timeElements[i].title]);
 
     return timeStamps.sort(function(a, b) {
         return new Date(b[0]) - new Date(a[0]);
@@ -121,6 +136,7 @@ function getAllTimeStamps() {
 }
 
 
+// compute time differentials among the first and all events
 function getTimeDiffs(timeStamps) {
     var timeDiffs = [];
     for (var i = 0; i < timeStamps.length; i++)
@@ -129,6 +145,7 @@ function getTimeDiffs(timeStamps) {
 }
 
 
+// change the format of displayed timestamps 
 function changeTimestamps() {
     drawTimeline();
     if (document.getElementById("absolute_time").checked) {
@@ -146,6 +163,7 @@ function changeTimestamps() {
 }
 
 
+// get all dates and transform them to the absolute format
 function absoluteDates() {
     var timeElements = document.getElementsByTagName("time");
     var timeElementCount = timeElements.length;
@@ -170,6 +188,7 @@ function absoluteDates() {
 }
 
 
+// get all dates and transform them to the relative format
 function relativeDates() {
     var timeElements = document.getElementsByTagName("time");
     var timeElementCount = timeElements.length;
@@ -205,6 +224,7 @@ function relativeDates() {
 }
 
 
+// compute time differential in all usual units
 function computeDifferentials(diffTime) {
     return [
         [Math.trunc(diffTime / 1000), "second"],
@@ -212,15 +232,7 @@ function computeDifferentials(diffTime) {
         [Math.trunc(diffTime / 3600000), "hour"],
         [Math.trunc(diffTime / 86400000), "day"],
         [Math.trunc(diffTime / 604800000), "week"],
-        [Math.trunc(diffTime / 2628000000), "month"], // TODO
-        [Math.trunc(diffTime / 31535965310), "year"]  // TODO
+        [Math.trunc(diffTime / 2628000000), "month"],
+        [Math.trunc(diffTime / 31535965310), "year"]
     ]
 }
-
-// TODO neprekryvajici se udalosti
-// TODO otestovat pro 0, 1 a 2 casovych udalosti
-// TODO komentare
-
-// TODO test in Internet Explorer or Microsoft Edge, Firefox and Chrome
-// TODO definujte vzhled všech zobrazovaných částí ve zvláštním externím stylovém předpise CSS 
-// opatřeném komentáři tak, aby uživatel mohl přizpůsobit vzhled řešení svým potřebám (zejména použité barvy, písmo, velikosti) 
