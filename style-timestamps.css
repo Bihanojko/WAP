@@ -1,0 +1,85 @@
+/* Project: Time data in documents */
+/* Subject: Internet Applications */
+/* Author: Nikola Valesova, xvales02 */
+
+/* "Timelime" header  */
+h3 {
+    text-align: center;
+}
+
+/* canvas element displaying timeline */
+canvas {
+    /* border: 1px solid #d3d3d3; */
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-bottom: 30px;
+}
+
+/* "Timestamps format" label */
+h4 {
+    margin-bottom: 10px;
+}
+
+/* radio buttons */
+/* container */
+.container {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* hide default radio buttons */
+.container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* custom radio buttons */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: rgb(224, 223, 223);
+    border-radius: 50%;
+}
+
+/* grey background on-mouse over */
+.container:hover input ~ .checkmark {
+    background-color: #CCCCCC;
+}
+
+/* red background when the radio button is checked */
+.container input:checked ~ .checkmark {
+    background-color: #FF0000;
+}
+
+/* white dot signing that the radio button is checked */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* show that a box is checked */
+.container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* white dot signing that the radio button is checked */
+.container .checkmark:after {
+ 	top: 5.3px;
+	left: 5.3px;
+	width: 9px;
+	height: 9px;
+	border-radius: 50%;
+	background: #FFFFFF;
+}
